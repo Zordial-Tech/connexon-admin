@@ -11,6 +11,12 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { confirmAlert } from 'react-confirm-alert';
 import countryData from "country-telephone-data";
 import Select, { components } from "react-select";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
+
+
+
 //import countryList from "react-select-country-list";
 
 
@@ -23,6 +29,8 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [originalUser, setOriginalUser] = useState({});
+   const [showPassword, setShowPassword] = useState(false);
+
 
 
   const filteredUsers = useMemo(() => {
@@ -300,6 +308,8 @@ const UserManagement = () => {
           toast.error("First Name is required");
           return;
         }
+
+        
         if (!currentUser.email.trim()) {
           toast.error("Email is required");
           return;
@@ -727,7 +737,13 @@ const UserManagement = () => {
             <p><b>Name:</b> {currentUser.full_name}</p>
             <p><b>Event Name:</b> {currentUser.event_name || "N/A"}</p>
             <p><b>Email:</b> {currentUser.email}</p>
-            <p><b>Date Of Birth:</b> {currentUser.dob || "N/A"}</p>
+            <p>
+              <b>Date Of Birth:</b>{" "}
+              {currentUser.dob
+                ? new Date(currentUser.dob).toLocaleDateString("en-GB") // 👈 dd/mm/yyyy format
+                : "N/A"}
+            </p>
+
             <p><b>Address:</b> {currentUser.address || "N/A"}</p>
 
             <p><b>Active Plan:</b></p>
@@ -1017,16 +1033,30 @@ const UserManagement = () => {
             </div>
 
             {modalType === "add" && (
-              <div className="form-group">
+              <div className="form-group" style={{ position: "relative" }}>
                 <label className="label-required">Password</label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={currentUser.password || ""}
                   onChange={(e) =>
                     setCurrentUser({ ...currentUser, password: e.target.value })
                   }
                   required
+                 
                 />
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: "absolute",
+                    right: "30px",
+                    top: "70%",
+                    transform: "translateY(-50%)",
+                    cursor: "pointer",
+                    color: "#555",
+                  }}
+                >
+                  {showPassword ? <BsEyeSlash /> : <BsEye />}
+                </span>
               </div>
             )}
 
@@ -1040,15 +1070,16 @@ const UserManagement = () => {
                 }
               />
             </div>
-
             <div className="form-group">
-              <label className="label-optional">Date Of Birth (yyyy-mm-dd) (optional)</label>
+              <label className="label-optional">Date Of Birth (optional)</label>
               <input
-                type="text"
+                type="date"
                 value={currentUser.dob || ""}
                 onChange={(e) =>
                   setCurrentUser({ ...currentUser, dob: e.target.value })
                 }
+                min="1900-01-01"     // ✅ allows old years
+                max={new Date().toISOString().split("T")[0]}  // ✅ blocks future dates
               />
             </div>
 

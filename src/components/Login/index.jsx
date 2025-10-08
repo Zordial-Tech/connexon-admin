@@ -5,6 +5,7 @@ import axios from "axios";
 import Wrapper from "./style";
 import Loader from "../../components/Loader";
 import axiosInstance from '../../axios/axiosInstance';
+import { FaEye, FaEyeSlash } from "react-icons/fa"; 
 
 
   const Login = () => {
@@ -12,6 +13,7 @@ import axiosInstance from '../../axios/axiosInstance';
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
 
   const navigate = useNavigate();
@@ -66,17 +68,33 @@ import axiosInstance from '../../axios/axiosInstance';
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+               style={{ paddingRight: "0px" }} 
             />
           </div>
 
-          <div className="form-group">
+          <div className="form-group" style={{ position: "relative" }}>
             <label>Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"} // 👈 toggle visibility
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              style={{ paddingRight: "0px" }} // 👈 make space for eye icon
             />
+
+            {/* 👁️ Eye icon for show/hide password */}
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "32px",
+                cursor: "pointer",
+                color: "#555",
+              }}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
           </div>
 
           <button type="submit" className="login-btn" disabled={loading}>
