@@ -6,7 +6,8 @@ import { IoLogOut } from 'react-icons/io5'
 import { FaCreditCard } from 'react-icons/fa';
 //import { MdEvent } from 'react-icons/md';
 //import { IoLogOut } from 'react-icons/io5';
-import { FaBell } from 'react-icons/fa'
+import { FaBell, FaFileContract, FaQuestionCircle,FaLifeRing } from 'react-icons/fa'
+import { PiUsersThree } from "react-icons/pi";
 
 
 
@@ -28,7 +29,6 @@ const Menu = () => {
         navigate("/login");
     };
 
-
     return (
         <Wrapper>
             <div className='menu-bar'>
@@ -40,7 +40,6 @@ const Menu = () => {
                         <FaHome size={24} />
                         <span>Dashboard</span>
                     </div> */}
-
 
                     <div className={`usermanagement ${currentPath === '/user' ? 'selected' : ''}`} onClick={() => handleChange('/user')}>
                         <FaUsers size={24} />
@@ -61,33 +60,40 @@ const Menu = () => {
                         <FaCreditCard size={24} />
                         <span>Users Payments</span>
                     </div>
-
                     <div
-                        className={`reminders ${currentPath === '/' ? 'selected' : ''
+                        className={`UserManagement ${currentPath === '/UserNetwork' ? 'selected' : ''
                             }`}
-                        onClick={() => handleChange('/reminders-alerts')}
+                        onClick={() => handleChange('/userNetwork')}
                     >
-                        <FaBell size={24} />
-                        <span>Send Reminders</span>
+                        <PiUsersThree size={24} />
+                        <span>User Network</span>
+                    </div>
+                    <div
+                        className={`UserManagement ${currentPath === '/Tearms_condition' ? 'selected' : ''
+                            }`}
+                        onClick={() => handleChange('/Terms_condition')}
+                    >
+                        <FaFileContract size={24} />
+                        <span>Terms&conditions</span>
+                    </div>
+                    <div
+                        className={`Help_support ${currentPath === "/Help_support" ? "selected" : ""
+                            }`}
+                        onClick={() => handleChange("/Help_support")}
+                    >
+                        <FaQuestionCircle size={24} />
+                        <span>Help and support</span>
                     </div>
 
-                    <div
-                        className={`reports ${currentPath === '/reports' ? 'selected' : ''
-                            }`}
-                        onClick={() => handleChange('/reports')}
-                    >
-                        <FaChartBar size={24} />
-                        <span>Reports</span>
-                    </div>
 
-                    <div
+                    {/* <div
                         className={`settings ${currentPath === '/settings' ? 'selected' : ''
                             }`}
                         onClick={() => handleChange('/Setting')}
                     >
                         <FaCog size={24} />
                         <span>Settings</span>
-                    </div>
+                    </div> */}
 
                     <div className='logout' onClick={handleLogout}>
                         <IoLogOut size={24} />

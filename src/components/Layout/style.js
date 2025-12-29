@@ -27,7 +27,7 @@ font-family: 'Inter', sans-serif;
   .menu {
     width: 210px;
     flex-shrink: 0;
-     background: #4977f6ff;
+     background: #7f5af0;
     height: 100%;
     overflow-y: auto;
     display: flex;
@@ -72,7 +72,7 @@ font-family: 'Inter', sans-serif;
   .footer {
     flex-shrink: 0;
     // padding: 10px;
-    background: #4977f6ff;
+    background: #7f5af0;
     text-align: center;
   }
 

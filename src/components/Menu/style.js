@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.section`
 .menu-bar{
-    background :#4977f6ff;
+    background :#7f5af0;
     display : flex;
     flex-direction : column;
     
@@ -47,7 +47,7 @@ const Wrapper = styled.section`
 }
 
 .content .logout{
-    border : 1.5px solid #4977f6ff;
+    border : 1.5px solid #7f5af0;
     margin : 4px;
     border-radius : 5px;
     color :rgb(211, 16, 16);

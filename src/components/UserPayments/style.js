@@ -225,7 +225,7 @@ const Wrapper = styled.section`
   thead {
     position: sticky;
     top: -1px;
-    background: #4977f6ff;
+    background: #7f5af0;
     color: white;
     z-index: 1;
     table-layout: fixed;
@@ -239,7 +239,7 @@ const Wrapper = styled.section`
   }
 
   table th {
-    background: #4977f6ff;
+    background: #7f5af0;
     color: black;
   }
 
@@ -348,7 +348,7 @@ const Wrapper = styled.section`
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: #4977f6ff;
+  background-color: #7f5af0;
   color: #333;
   font-size: 14px;
   font-weight: 500;
@@ -472,7 +472,7 @@ const Wrapper = styled.section`
 
 .filter-btn {
   padding: 4px 16px;
-  background-color: #4977f6ff;
+  background-color: #7f5af0;
   color: #333;
   border: 1px solid #ccc;
   border-radius: 6px;

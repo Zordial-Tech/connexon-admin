@@ -45,7 +45,7 @@ const Wrapper = styled.section`
   .login-btn {
     width: 50%;
     padding: 10px;
-    background: #4cafef;
+    background: #7f5af0;
     border: none;
     color: white;
      display: block;     /* make it a block element */
@@ -56,7 +56,7 @@ const Wrapper = styled.section`
   }
 
   .login-btn:hover {
-    background: #2196f3;
+    background: #b1a1e1ff;
   }
 
   .error {
