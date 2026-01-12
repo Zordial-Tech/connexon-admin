@@ -51,7 +51,7 @@ const TermsAndConditions = () => {
     };
     fetch();
   }, []);
- 
+
   const handleEditSave = async () => {
     if (isEditMode) {
       // SAVE
@@ -64,9 +64,10 @@ const TermsAndConditions = () => {
       }
 
       setActionLoading(true);
+      
       try {
         const payload = { terms_and_conditions: terms, privacy_policy: privacy };
-    
+
         try {
           await axiosInstance.put("/api/admin/app-settings", payload);
         } catch (e) {
@@ -98,7 +99,7 @@ const TermsAndConditions = () => {
       setPrivacyText(backupDoc.privacyText);
     }
     setBackupDoc(null);
-    setIsEditMode(false);
+    setIsEditMode(false); 
   };
 
   const handleReset = async () => {
@@ -158,9 +159,9 @@ const TermsAndConditions = () => {
                 <FaTimes style={{ marginRight: 6 }} /> Cancel
               </Button>
             )}
+           
           </ButtonGroup>
         </Header>
-
         <Content>
           <Section>
             <SectionHeader />

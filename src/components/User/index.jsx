@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { FaSearch, FaBell, FaEdit, FaEye } from "react-icons/fa";
-import { FiBell, FiSend } from "react-icons/fi";
+import { FiBell, FiSend,FiTrash2 } from "react-icons/fi";
 import { MdAddCircle, MdDelete, MdClose, MdLockReset } from "react-icons/md";
 import axiosInstance from "../../axios/axiosInstance";
 import Wrapper from "./style"; // optional CSS wrapper
@@ -799,7 +799,7 @@ const UserManagement = () => {
                         className="delete-btn"
                         onClick={() => handleDeleteWithConfirm(user.id)}
                       >
-                        <MdDelete size={20} />
+                        <FiTrash2 size={20} />
                       </button>
 
                     </div>

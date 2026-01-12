@@ -26,9 +26,9 @@ const Layout = () => {
                         <div className="header">
                             <Header />
                         </div>
-                        {/* } */}
+                        {/* <div className="content-scroll"> */}
                         <div className="outlet">
-                            <Outlet />
+                            <Outlet/>
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,8 @@ const Layout = () => {
                 <div className="footer">
                     <Footer/>
                 </div>
-            </div>
+                </div>
+            {/* </div> */}
         </Wrapper>
     )
 }

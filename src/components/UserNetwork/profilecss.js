@@ -151,7 +151,7 @@ max-height:540px;
   max-width: 800px;
   margin: 20px auto;
   padding: 15px;
-  background: #fff;
+  background: #e6e6e6;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   text-align: center;
@@ -211,7 +211,7 @@ max-height:540px;
   position: sticky;
   top: 0;
   background-color: #7F5AF0; /* must be set */
-  color: #000;
+  color: #fff;
   z-index: 10; /* keeps header above rows */
 }
 
@@ -225,7 +225,7 @@ max-height:540px;
 
 .view-connection-btn {
     background-color: #7f5af0;
-    color: #000;
+    color: #fff;
     padding: 10px 14px;
     border: none;
     border-radius: 5px;
@@ -299,9 +299,9 @@ max-height:540px;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   width: 100%;
-  margin: 10px 0 20px 0;
+  // margin: 10px 0 20px 0;
   padding: 12px 20px;
-  background: #fff;
+  background: #e6e6e6;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
@@ -324,7 +324,7 @@ max-height:540px;
 
 .leads-without-events-btn {
   background-color: #7f5af0;
-  color: #000;
+  color: #fff;
   border: none;
   padding: 10px 16px;
   margin-right: 30px;

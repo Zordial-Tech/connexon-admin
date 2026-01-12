@@ -12,7 +12,7 @@ const Wrapper = styled.header`
 
   .header {
     h1 {
-      font-size: 30px;   /* reduce font size */
+      font-size: 32px;   /* reduce font size */
       padding: 0 10px;   /* less padding → less height */
     }
       

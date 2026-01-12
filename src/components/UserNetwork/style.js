@@ -110,6 +110,7 @@ const Wrapper = styled.section`
     overflow-y: auto;
     margin: 0 10px;
     box-sizing: border-box;
+    border-radius: 12px;
   }
 
   /* ---------- MAIN TABLE ---------- */
@@ -121,7 +122,7 @@ const Wrapper = styled.section`
 
     thead th {
       background-color: #7f5af0;
-      color: #000;
+      color: #fff;
       font-size: 1rem;
       font-weight: 700;
       padding: 11px;
@@ -137,6 +138,7 @@ const Wrapper = styled.section`
       text-align: center;
       border-bottom: 1px solid #ddd;
       border-right: 1px solid #ddd;
+      background: #fffbf4;
     }
 
     td:last-child,
@@ -193,21 +195,30 @@ const Wrapper = styled.section`
 
   /* ---------- BUTTON ---------- */
   .view-profile {
-    background-color: #7f5af0;
-    color: #000000c6;
-    padding: 8px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    border: none;
-    font-size: 12px;
-    font-weight: 550;
-    transition: all 0.3s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #7f5af0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
 
-    // &:hover {
-    //   background-color: #161f28ff;
-    //   color: white;
-    // }
-  }
+.view-profile:hover {
+  // background-color: #e2e6ea;
+  // border-color: #999;
+  transform: scale(1.03);
+}
+
+
+.view-profile:active {
+  transform: scale(0.98);
+}
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 768px) {
