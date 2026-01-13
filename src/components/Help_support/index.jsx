@@ -171,11 +171,10 @@ const HelpSupportAdmin = () => {
             <h2>Select Support Options</h2>
 
             {loading && (
-              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.6)", zIndex: 2 }}>
+             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255,255,255,0.6)", zIndex: 2 }}>
                 <Loader loading={true} />
               </div>
             )}
-
             <div style={{ opacity: loading ? 0.4 : 1, pointerEvents: loading ? "none" : "auto" }}>
               <div className="checkbox-group">
                 {SUPPORT_TYPES.map((item) => {
@@ -246,7 +245,6 @@ const HelpSupportAdmin = () => {
                         <div className="icon-btn" onClick={() => handleEdit(item)}>
                           <FiEdit2 className="icon edit-icon" />
                         </div>
-
                         <div className="icon-btn" onClick={() => handleDelete(item.type)}>
                           <FiTrash2 className="icon delete-icon" />
                         </div>

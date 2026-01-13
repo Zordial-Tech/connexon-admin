@@ -87,20 +87,20 @@ const ProfilePage = () => {
   return (
     <Wrapper>
       <div className="user-leads-header">
-  <button className="back-button" onClick={() => navigate(-1)}>
-    <FaArrowLeft />
-  </button>
+        <button className="back-button" onClick={() => navigate(-1)}>
+          <FaArrowLeft />
+        </button>
 
-  <h2 className="profile-header">User Leads</h2>
+        <h2 className="profile-header">User Leads</h2>
 
-  <button
-    className="leads-without-events-btn"
-    onClick={handleLeadsWithoutEvents}
-  >
-    <FaUser />
-    Leads Without Events
-  </button>
-</div>
+        <button
+          className="leads-without-events-btn"
+          onClick={handleLeadsWithoutEvents}
+        >
+          <FaUser />
+          Leads Without Events
+        </button>
+      </div>
 
       <div className="wholeprofile">
         <div className="event-list-container">

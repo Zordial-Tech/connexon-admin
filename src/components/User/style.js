@@ -10,6 +10,7 @@ const Wrapper = styled.section`
   justify-content: space-between;
   flex-wrap: wrap; /* ✅ allows wrapping */
   gap: 15px;
+  //  background-color: #fffbf4;
 }
 
 
@@ -23,7 +24,7 @@ const Wrapper = styled.section`
 .search-container {
   flex-grow: 1;
   width: 100%;
-  max-width: 350px;
+  max-width: 340px;
   display: flex;
   justify-content: center;
   position: relative;
@@ -37,11 +38,10 @@ const Wrapper = styled.section`
     transform: translateY(-50%);
     color: #777;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 14px;
     transition: color 0.3s ease-in-out;
   }
     
-
 .search-input {
   width: 100%;
   max-width: 450px;
@@ -51,7 +51,7 @@ const Wrapper = styled.section`
   border: 1px solid #ddd;
   border-radius: 8px;
   outline: none;
-  background: #f9f9f9;
+  background: #fffbf4;
   transition: all 0.3s ease-in-out;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -66,7 +66,6 @@ const Wrapper = styled.section`
     color: #007bff;
   }
 
-
   .table-container {
     max-height: 515px;
     overflow-y: auto;
@@ -75,8 +74,9 @@ const Wrapper = styled.section`
     position: relative;
     margin-left: 10px;
     margin-right: 10px;
+    border-radius: 12px;
+   
   }
-
 
   .button-placeholder {
     display: flex;
@@ -205,9 +205,10 @@ const Wrapper = styled.section`
   table {
     width: 100%;
     border-collapse: collapse;
+    // border-radius: 22px;
     //table-layout: fixed;
   }
-
+   
   thead {
     position: sticky;
     top: -1px;
@@ -226,21 +227,23 @@ const Wrapper = styled.section`
 
   table th {
     background: #7f5af0;
-    color: black;
+    color: #fff;
   }
 
   table td {
-    background: #fff;
+    background: #fffbf4;
   }
+
 
   
   .table-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: white;
+  background-color: e6e6e6;
   padding: 10px 10px 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border-radius: 12px;
+  // box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
   .edit-btn {
@@ -308,7 +311,6 @@ const Wrapper = styled.section`
   input:checked + .slider:before {
     transform: translateX(22px);
   }
-
 
 .newsavebtn {
     button {

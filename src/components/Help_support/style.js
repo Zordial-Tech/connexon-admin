@@ -7,7 +7,7 @@ const Wrapper = styled.section`
     flex-direction: column;
     background: #f5f7fa;
     font-family: Arial, sans-serif;
-    overflow-y: auto; /* ✅ MAIN PAGE SCROLL */
+    // overflow-y: auto; /* ✅ MAIN PAGE SCROLL */
   }
 
   .header {
@@ -24,7 +24,7 @@ const Wrapper = styled.section`
     max-width: 1000px;
     margin: auto;
     margin-top: -30px;
-    overflow-y: auto; /* ✅ content scroll */
+    // overflow-y: auto; /* ✅ content scroll */
     // margin-left: 0;
   }
     .card {
@@ -42,6 +42,9 @@ const Wrapper = styled.section`
     padding: 24px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      max-height: 60vh;        /* 🔥 control visible height */
+  overflow-y: auto;        /* 🔥 scroll inside card only */
+}
   }
 
   .checkbox-group {
@@ -154,7 +157,7 @@ const Wrapper = styled.section`
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     max-height: calc(100vh - 200px);
-    overflow-y: auto;
+    // overflow-y: auto;
   }
 
   .support-grid {
@@ -220,6 +223,9 @@ const Wrapper = styled.section`
 
 .saved-section {
   margin-top: 24px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 6px;
 }
 
     @media (max-width: 768px) {

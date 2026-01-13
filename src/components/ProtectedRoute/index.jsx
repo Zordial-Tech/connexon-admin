@@ -1,13 +1,13 @@
-// src/components/ProtectedRoute/index.jsx
-import React from "react";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("authToken"); // or "auth"
-  if (!token) {
+  const isAuthenticated = localStorage.getItem("token"); // or your auth logic
+
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  return children;
+
+  return children; // ✅ DO NOT redirect here
 };
 
 export default ProtectedRoute;
