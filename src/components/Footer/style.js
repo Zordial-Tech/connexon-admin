@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Wrapper = styled.footer`
-background : #4977f6ff;
+background : #7f5af0;
 width : 100%;
 min-height: 5px;
 p{

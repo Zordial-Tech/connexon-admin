@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Wrapper = styled.header`
-  background: #4977f6ff;
+  background: #7f5af0;
   width: calc(100%);
   min-height: 85px;
    /* reduce height here */
@@ -12,10 +12,10 @@ const Wrapper = styled.header`
 
   .header {
     h1 {
-      font-size: 30px;   /* reduce font size */
+      font-size: 32px;   /* reduce font size */
       padding: 0 10px;   /* less padding → less height */
     }
-
+      
     img {
       width: 24px;
       height: 24px;
@@ -24,7 +24,6 @@ const Wrapper = styled.header`
     }
   }
 `
-
 
 
 export default Wrapper

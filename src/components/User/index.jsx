@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect, useState } from "react";
-import { FaSearch, FaEdit, FaEye } from "react-icons/fa";
+import { FaSearch, FaBell, FaEdit, FaEye } from "react-icons/fa";
+import { FiBell, FiSend,FiTrash2 } from "react-icons/fi";
 import { MdAddCircle, MdDelete, MdClose, MdLockReset } from "react-icons/md";
 import axiosInstance from "../../axios/axiosInstance";
 import Wrapper from "./style"; // optional CSS wrapper
@@ -11,6 +12,12 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { confirmAlert } from 'react-confirm-alert';
 import countryData from "country-telephone-data";
 import Select, { components } from "react-select";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
+
+
+
 //import countryList from "react-select-country-list";
 
 
@@ -23,7 +30,12 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [originalUser, setOriginalUser] = useState({});
-
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPushModal, setShowPushModal] = useState(false);
+  const [pushMessage, setPushMessage] = useState("");
+  const [pushTitle, setPushTitle] = useState("");
+  const [selectedPushUser, setSelectedPushUser] = useState(null); // null = bulk mode
+  const wordLimit = 10;
 
   const filteredUsers = useMemo(() => {
     if (!Array.isArray(users)) return []; // guard
@@ -55,7 +67,6 @@ const UserManagement = () => {
     </components.SingleValue>
   );
 
-
   const allCountries = (countryData && countryData.allCountries) || [];
   const countryOptions = useMemo(() => {
     return allCountries.map((c) => ({
@@ -76,6 +87,7 @@ const UserManagement = () => {
       width: "100px",       // 👈 shrink input box
       paddingLeft: "4px",
     }),
+
     valueContainer: (provided) => ({
       ...provided,
       height: "38px",
@@ -90,6 +102,7 @@ const UserManagement = () => {
       margin: 0,
       padding: 0,
     }),
+
     menu: (provided) => ({
       ...provided,
       width: "200px",      // 👈 keep dropdown list wide
@@ -107,8 +120,6 @@ const UserManagement = () => {
   };
 
 
-
-
   const handleDeleteWithConfirm = (id) => {
     confirmAlert({
       title: 'Confirm Delete',
@@ -123,6 +134,63 @@ const UserManagement = () => {
         }
       ]
     });
+  };
+  const sendPushNotification = async () => {
+    // Prevent duplicate sends when a request is already in progress
+    if (actionLoading) return;
+    if (!pushTitle.trim()) {
+      toast.error("Title is required");
+      return;
+    }
+
+    if (!pushMessage.trim()) {
+      toast.error("Message is required");
+      return;
+    }
+
+    // ✅ Single user or bulk users
+    const userIds = selectedPushUser
+      ? [selectedPushUser.id]
+      : users.filter(u => u.selected).map(u => u.id);
+
+    if (!userIds.length) {
+      toast.error("No users selected");
+      return;
+    }
+
+    try {
+      setActionLoading(true);
+
+      const payload = {
+        user_ids: userIds,
+        title: pushTitle.trim(),
+        message: pushMessage,
+        data: {
+          source: "admin-panel"
+        }
+      };
+
+      const res = await axiosInstance.post(
+        "/api/admin/notifications/send",
+        payload
+      );
+
+      toast.success(res.data?.message || "Notification sent");
+
+      // reset UI
+      setShowPushModal(false);
+      setPushMessage("");
+      setPushTitle("");
+      setSelectedPushUser(null);
+
+    } catch (error) {
+      console.error("❌ Push notification failed:", error);
+      toast.error(
+        error.response?.data?.message || "Failed to send notification"
+      );
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   const handleBulkDeleteWithConfirm = () => {
@@ -234,152 +302,154 @@ const UserManagement = () => {
   };
 
   // 🔹 4. Save (create or update)
-  const handleSaveUser = async () => {
-    setActionLoading(true);
+  // const handleSaveUser = async () => {
+  //   setActionLoading(true);
 
-    try {
-      // ---------------------- ADD USER ----------------------
-      if (modalType === "add") {
-        // Mandatory checks
-        if (!currentUser.first_name.trim()) {
-          toast.error("First Name is required");
-          return;
-        }
-        if (!currentUser.email.trim()) {
-          toast.error("Email is required");
-          return;
-        }
-        if (!currentUser.phone.trim()) {
-          toast.error("Phone number is required");
-          return;
-        }
-        if (!currentUser.password?.trim()) {
-          toast.error("Password is required");
-          return;
-        }
+  //   try {
+  //     // ---------------------- ADD USER ----------------------
+  //     if (modalType === "add") {
+  //       // Mandatory checks
+  //       if (!currentUser.first_name.trim()) {
+  //         toast.error("First Name is required");
+  //         return;
+  //       }
+  //       if (!currentUser.email.trim()) {
+  //         toast.error("Email is required");
+  //         return;
+  //       }
+  //       if (!currentUser.phone.trim()) {
+  //         toast.error("Phone number is required");
+  //         return;
+  //       }
+  //       if (!currentUser.password?.trim()) {
+  //         toast.error("Password is required");
+  //         return;
+  //       }
 
-        const payload = {
-          first_name: currentUser.first_name,
-          middle_name: currentUser.middle_name,
-          last_name: currentUser.last_name,
-          email: currentUser.email,
-          password: currentUser.password,
-          dob: currentUser.dob,
-          address: currentUser.address,
-          phone_numbers: [
-            { country_code: currentUser.country_code || "+91", phone_number: currentUser.phone },
-            ...(currentUser.otherPhones || []).filter(p => !p.isDeleted).map(p => ({
-              country_code: p.country_code || currentUser.country_code || "+91",
-              phone_number: p.phone_number,
-            })),
-          ],
-        };
+  //       const payload = {
+  //         first_name: currentUser.first_name,
+  //         middle_name: currentUser.middle_name,
+  //         last_name: currentUser.last_name,
+  //         email: currentUser.email,
+  //         password: currentUser.password,
+  //         dob: currentUser.dob,
+  //         address: currentUser.address,
+  //         phone_numbers: [
+  //           { country_code: currentUser.country_code || "+91", phone_number: currentUser.phone },
+  //           ...(currentUser.otherPhones || []).filter(p => !p.isDeleted).map(p => ({
+  //             country_code: p.country_code || currentUser.country_code || "+91",
+  //             phone_number: p.phone_number,
+  //           })),
+  //         ],
+  //       };
 
-        const res = await axiosInstance.post("/api/admin/user/create", payload);
+  //       const res = await axiosInstance.post("/api/admin/user/create", payload);
 
-        if (res.data?.data) {
-          const created = res.data.data;
-          setUsers((prev) => [
-            {
-              ...created,
-              phone: created.phone_numbers?.[0]?.phone_number || "",
-              otherPhones: (created.phone_numbers || []).slice(1) || [],
-              selected: false,
-            },
-            ...prev,
-          ]);
+  //       if (res.data?.data) {
+  //         const created = res.data.data;
+  //         setUsers((prev) => [
+  //           {
+  //             ...created,
+  //             phone: created.phone_numbers?.[0]?.phone_number || "",
+  //             otherPhones: (created.phone_numbers || []).slice(1) || [],
+  //             selected: false,
+  //           },
+  //           ...prev,
+  //         ]);
 
-          toast.success(res.data?.message || "User added successfully!");
-          closeModal();
-        }
-      }
+  //         toast.success(res.data?.message || "User added successfully!");
+  //         closeModal();
+  //       }
+  //     }
 
-      // ---------------------- EDIT USER ----------------------
-      else if (modalType === "edit") {
-        if (!currentUser.first_name.trim()) {
-          toast.error("First Name is required");
-          return;
-        }
-        if (!currentUser.email.trim()) {
-          toast.error("Email is required");
-          return;
-        }
-        if (!currentUser.phone.trim()) {
-          toast.error("Phone number is required");
-          return;
-        }
+  //     // ---------------------- EDIT USER ----------------------
+  //     else if (modalType === "edit") {
+  //       if (!currentUser.first_name.trim()) {
+  //         toast.error("First Name is required");
+  //         return;
+  //       }
 
-        // Helper: convert empty string → null
-        const toNull = (val) => (val && val.trim() ? val.trim() : null);
 
-        const payload = {
-          first_name: toNull(currentUser.first_name),
-          middle_name: toNull(currentUser.middle_name),
-          last_name: toNull(currentUser.last_name),
-          email: toNull(currentUser.email),
-          dob: toNull(currentUser.dob),
-          address: toNull(currentUser.address),
-          event_name: toNull(currentUser.event_name),
-          phone_numbers: [
-            {
-              id: currentUser.phone_id,
-              country_code: currentUser.country_code || "+91",
-              phone_number: currentUser.phone,
-            },
-            ...(currentUser.otherPhones || []).map((num) => {
-              if (num.isDeleted) return { id: num.id }; // backend will delete
-              return {
-                id: num.id || undefined,
-                country_code: num.country_code || currentUser.country_code || "+91",
-                phone_number: toNull(num.phone_number),
-              };
-            }),
-          ],
+  //       if (!currentUser.email.trim()) {
+  //         toast.error("Email is required");
+  //         return;
+  //       }
+  //       if (!currentUser.phone.trim()) {
+  //         toast.error("Phone number is required");
+  //         return;
+  //       }
 
-        };
+  //       // Helper: convert empty string → null
+  //       const toNull = (val) => (val && val.trim() ? val.trim() : null);
 
-        const res = await axiosInstance.put(
-          `/api/admin/user/update/${currentUser.id}`,
-          payload
-        );
+  //       const payload = {
+  //         first_name: toNull(currentUser.first_name),
+  //         middle_name: toNull(currentUser.middle_name),
+  //         last_name: toNull(currentUser.last_name),
+  //         email: toNull(currentUser.email),
+  //         dob: toNull(currentUser.dob),
+  //         address: toNull(currentUser.address),
+  //         event_name: toNull(currentUser.event_name),
+  //         phone_numbers: [
+  //           {
+  //             id: currentUser.phone_id,
+  //             country_code: currentUser.country_code || "+91",
+  //             phone_number: currentUser.phone,
+  //           },
+  //           ...(currentUser.otherPhones || []).map((num) => {
+  //             if (num.isDeleted) return { id: num.id }; // backend will delete
+  //             return {
+  //               id: num.id || undefined,
+  //               country_code: num.country_code || currentUser.country_code || "+91",
+  //               phone_number: toNull(num.phone_number),
+  //             };
+  //           }),
+  //         ],
 
-        const apiUser = res.data?.data ?? {};
-        const phones = apiUser.phone_numbers || [];
+  //       };
 
-        setUsers((prev) =>
-          prev.map((u) =>
-            u.id === currentUser.id
-              ? {
-                ...u,
-                ...apiUser,
-                dob: apiUser.dob ? apiUser.dob.split("T")[0] : "",
-                phone: phones[0]?.phone_number || "",
-                phone_id: phones[0]?.id ?? null,
-                country_code: phones[0]?.country_code || "+91",
-                otherPhones: phones.slice(1),
-                full_name: [
-                  apiUser.first_name,
-                  apiUser.middle_name,
-                  apiUser.last_name,
-                ]
-                  .filter(Boolean)
-                  .join(" "),
-                event_name: apiUser.event_name || null,
-              }
-              : u
-          )
-        );
+  //       const res = await axiosInstance.put(
+  //         `/api/admin/user/update/${currentUser.id}`,
+  //         payload
+  //       );
 
-        toast.success(res.data?.message || "User updated successfully!");
-        closeModal();
-      }
-    } catch (error) {
-      console.error("❌ Save failed:", error.response?.data || error);
-      toast.error(error.response?.data?.message || "Failed to save user");
-    } finally {
-      setActionLoading(false);
-    }
-  };
+  //       const apiUser = res.data?.data ?? {};
+  //       const phones = apiUser.phone_numbers || [];
+
+  //       setUsers((prev) =>
+  //         prev.map((u) =>
+  //           u.id === currentUser.id
+  //             ? {
+  //               ...u,
+  //               ...apiUser,
+  //               dob: apiUser.dob ? apiUser.dob.split("T")[0] : "",
+  //               phone: phones[0]?.phone_number || "",
+  //               phone_id: phones[0]?.id ?? null,
+  //               country_code: phones[0]?.country_code || "+91",
+  //               otherPhones: phones.slice(1),
+  //               full_name: [
+  //                 apiUser.first_name,
+  //                 apiUser.middle_name,
+  //                 apiUser.last_name,
+  //               ]
+  //                 .filter(Boolean)
+  //                 .join(" "),
+  //               event_name: apiUser.event_name || null,
+  //             }
+  //             : u
+  //         )
+  //       );
+
+  //       toast.success(res.data?.message || "User updated successfully!");
+  //       closeModal();
+  //     }
+  //   } catch (error) {
+  //     console.error("❌ Save failed:", error.response?.data || error);
+  //     toast.error(error.response?.data?.message || "Failed to save user");
+  //   } finally {
+  //     setActionLoading(false);
+  //   }
+  // };
 
 
   // 🔹 5. Delete one
@@ -393,7 +463,6 @@ const UserManagement = () => {
     } catch (err) {
       console.error("❌ Delete failed:", err.response?.data || err);
       toast.error("Failed to delete user");
-
     }
     finally {
       setActionLoading(false); // hide loader
@@ -447,6 +516,7 @@ const UserManagement = () => {
       } else if (res.data?.data?.status === "active") {
         toast.success("User unblocked successfully!");
       }
+
     } catch (e) {
       console.error("❌ Toggle failed:", e.response?.data || e);
 
@@ -454,10 +524,11 @@ const UserManagement = () => {
       setUsers((prev) =>
         prev.map((u) => (u.id === user.id ? { ...u, status: user.status } : u))
       );
-
+      
       toast.error(e.response?.data?.message || "Failed to update user status");
     }
   };
+
   const handleRemovePhone = (index) => {
     setCurrentUser((prev) => {
       const updated = [...prev.otherPhones];
@@ -475,15 +546,8 @@ const UserManagement = () => {
     });
   };
 
-
-
   // 🔹 8. Toggle QR Code status
   const handleToggleQrCodeStatus = async (user) => {
-    // 🚫 Case 1: No QR ever generated
-    // if (!user.active_qr_code || !user.active_qr_code.qr_code_data) {
-    //   toast.error("This user has not generated a QR code yet. Enable/disable is not allowed.");
-    //   return;
-    // }
 
     // 🚫 Case 3: If QR was disabled in backend from start (not generated by user)
     if (user.active_qr_code.is_active === false) {
@@ -505,7 +569,6 @@ const UserManagement = () => {
 
     try {
       const payload = { qr_disabled_by_admin: newDisabled };
-
       const res = await axiosInstance.put(
         `/api/admin/qr-codes/deactivate/${user.id}`,
         payload
@@ -526,6 +589,7 @@ const UserManagement = () => {
       } else {
         toast.success("QR Code enabled successfully!");
       }
+      
     } catch (err) {
       console.error("❌ QR toggle failed:", err);
 
@@ -537,11 +601,9 @@ const UserManagement = () => {
             : u
         )
       );
-
       toast.error("Failed to update QR Code status");
     }
   };
-
 
   // ----------------- UI -----------------
   if (loading) return <Loader loading={loading} />;
@@ -564,6 +626,22 @@ const UserManagement = () => {
           <div className="button-wrapper">
             <div className="button-placeholder">
               <button
+                className="push-btn"
+                onClick={() => {
+                  setSelectedPushUser(null); // bulk mode
+                  setShowPushModal(true);
+                }}
+                disabled={!users.some((u) => u.selected)}
+                style={{
+                  visibility: users.some((u) => u.selected) ? "visible" : "hidden",
+                }}
+              ><span>Push Notification</span>
+                <FiSend size={16} className="push-icon" />
+
+              </button>
+
+
+              <button
                 className="bulk-reset-btn"
                 onClick={() => alert("Reset password sent (simulated).")}
                 disabled={!users.some((u) => u.selected)}
@@ -579,9 +657,9 @@ const UserManagement = () => {
               >
                 Delete <MdDelete size={26} />
               </button>
-              <button className="add-btn" onClick={() => openModal("add")}>
+              {/* <button className="add-btn" onClick={() => openModal("add")}>
                 Add <MdAddCircle size={26} />
-              </button>
+              </button> */}
             </div>
           </div>
         </section>
@@ -603,8 +681,8 @@ const UserManagement = () => {
               </th>
               <th>ID</th>
               <th>Name</th>
-              <th>Email</th>
-              <th>Reg. Phone</th>
+              {/* <th>Email</th>
+              <th>Reg. Phone</th> */}
               <th>Active Plan</th>
               <th>User</th>
               <th>QR Code</th>
@@ -636,15 +714,15 @@ const UserManagement = () => {
                         .join(" ") || user.full_name}
                     </div>
                   </td>
-                  <td className="name-wrap"><div
+                  {/* <td className="name-wrap"><div
                     className="name-text"
-                  >{user.email}</div> </td>
+                  >{user.email}</div> </td> */}
                   {/* <td>{user.phone || "N/A"}</td> */}
-                  <td>
+                  {/* <td>
                     {user.phone_numbers?.[0]
                       ? `${user.phone_numbers[0].country_code || "+91"} ${user.phone_numbers[0].phone_number}`
                       : "N/A"}
-                  </td>
+                  </td> */}
 
 
                   <td>{user.plan_details?.name
@@ -697,15 +775,33 @@ const UserManagement = () => {
                   </td>
                   <td>
                     <div className="button">
-                      <button className="view-btn" onClick={() => openModal("view", user)}>
+                      {/* <button className="view-btn" onClick={() => openModal("view", user)}>
                         <FaEye size={20} />
-                      </button>
-                      <button className="edit-btn" onClick={() => openModal("edit", user)}>
+                      </button> */}
+                      {/* <button className="edit-btn" onClick={() => openModal("edit", user)}>
                         <FaEdit size={20} />
+                      </button> */}
+                      {/* 🔔 Notify Single User */}
+                      <button
+                        className="notify-btn"
+                        onClick={() => {
+                          setSelectedPushUser(user);
+                          setShowPushModal(true);
+                        }}
+                      >
+                        <FiBell size={18} className="bell-icon" />
                       </button>
-                      <button className="delete-btn" onClick={() => handleDeleteWithConfirm(user.id)}>
-                        <MdDelete size={20} />
+
+
+
+                      {/* Delete button */}
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDeleteWithConfirm(user.id)}
+                      >
+                        <FiTrash2 size={20} />
                       </button>
+
                     </div>
                   </td>
                 </tr>
@@ -716,7 +812,7 @@ const UserManagement = () => {
       </div>
 
       {/* View Modal */}
-      {modalType === "view" && (
+      {/* {modalType === "view" && (
         <div className="modal">
           <div className="modal-content view-modal">
             <button className="close-icon" onClick={closeModal}>
@@ -727,7 +823,13 @@ const UserManagement = () => {
             <p><b>Name:</b> {currentUser.full_name}</p>
             <p><b>Event Name:</b> {currentUser.event_name || "N/A"}</p>
             <p><b>Email:</b> {currentUser.email}</p>
-            <p><b>Date Of Birth:</b> {currentUser.dob || "N/A"}</p>
+            <p>
+              <b>Date Of Birth:</b>{" "}
+              {currentUser.dob
+                ? new Date(currentUser.dob).toLocaleDateString("en-GB") // 👈 dd/mm/yyyy format
+                : "N/A"}
+            </p>
+
             <p><b>Address:</b> {currentUser.address || "N/A"}</p>
 
             <p><b>Active Plan:</b></p>
@@ -753,8 +855,6 @@ const UserManagement = () => {
             ) : (
               <p style={{ marginLeft: "20px" }}>No active plan</p>
             )}
-
-
 
             <p><b>Upcoming Plans:</b></p>
 
@@ -826,10 +926,10 @@ const UserManagement = () => {
 
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Add/Edit Modal */}
-      {(modalType === "add" || modalType === "edit") && (
+      {/* {(modalType === "add" || modalType === "edit") && (
         <div className="modal">
           <div className="modal-content form-modal">
             <h3>{modalType === "add" ? "Add User" : "Edit User"}</h3>
@@ -897,26 +997,25 @@ const UserManagement = () => {
               <div className="form-group">
                 <label className="label-required">Registration Number</label>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, width: "385px" }}>
-                  {/* <div style={{ width: 200 }}> */}
+              
                   <Select
                     options={countryOptions}
                     styles={selectStyles}
                     isSearchable
                     placeholder="Country"
-                    //  menuPortalTarget={document.body}  
+              
                     components={{ SingleValue }}
                     value={countryOptions.find(opt => opt.value === (currentUser.country_code || "+91")) || null}
                     onChange={(opt) => setCurrentUser({ ...currentUser, country_code: opt?.value || "+91" })}
                   />
-                  {/* </div> */}
+                
 
                   <input
                     type="tel"
                     value={currentUser.phone || ""}
                     onChange={(e) => setCurrentUser({ ...currentUser, phone: e.target.value })}
                     required
-                  //style={{ flex: 1, padding: "8px", borderRadius: "4px", border: "1px solid #ccc" }}
-                  //placeholder="Enter phone number"
+                 
                   />
 
                 </div>
@@ -1012,21 +1111,33 @@ const UserManagement = () => {
                   </div>
                 ))}
 
-
-
             </div>
 
             {modalType === "add" && (
-              <div className="form-group">
+              <div className="form-group" style={{ position: "relative" }}>
                 <label className="label-required">Password</label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={currentUser.password || ""}
                   onChange={(e) =>
                     setCurrentUser({ ...currentUser, password: e.target.value })
                   }
                   required
+                 
                 />
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: "absolute",
+                    right: "30px",
+                    top: "70%",
+                    transform: "translateY(-50%)",
+                    cursor: "pointer",
+                    color: "#555",
+                  }}
+                >
+                  {showPassword ? <BsEyeSlash /> : <BsEye />}
+                </span>
               </div>
             )}
 
@@ -1040,15 +1151,16 @@ const UserManagement = () => {
                 }
               />
             </div>
-
             <div className="form-group">
-              <label className="label-optional">Date Of Birth (yyyy-mm-dd) (optional)</label>
+              <label className="label-optional">Date Of Birth (optional)</label>
               <input
-                type="text"
+                type="date"
                 value={currentUser.dob || ""}
                 onChange={(e) =>
                   setCurrentUser({ ...currentUser, dob: e.target.value })
                 }
+                min="1900-01-01"     // ✅ allows old years
+                max={new Date().toISOString().split("T")[0]}  // ✅ blocks future dates
               />
             </div>
 
@@ -1060,7 +1172,71 @@ const UserManagement = () => {
             </div>
           </div>
         </div>
+      )} */}
+
+      {showPushModal && (
+        <div className="push-overlay">
+          <div className="push-modal">
+            <h3>
+              Send Push Notification
+              {selectedPushUser
+                ? ` to ${selectedPushUser.first_name.length > 10
+                  ? selectedPushUser.first_name.slice(0, 10) + "..."
+                  : selectedPushUser.first_name
+                }`
+                : ""}
+            </h3>
+
+            <div style={{ marginBottom: 8 }}>
+              <input
+                type="text"
+                className="push-title-input"
+                value={pushTitle}
+                maxLength={80}
+                placeholder="Title (required)"
+                onChange={(e) => setPushTitle(e.target.value)}
+                style={{ width: '100%', padding: '8px', boxSizing: 'border-box',borderRadius: '6px' }}
+              />
+            </div>
+
+            <textarea
+              className="push-textarea"
+              value={pushMessage}
+              maxLength={200}
+              onChange={(e) => setPushMessage(e.target.value)}
+              placeholder={`Enter your message...`}
+            ></textarea>
+
+            {/* <p className="word-count">
+              {pushMessage.split(" ").filter(Boolean).length}/{wordLimit} words
+            </p> */}
+
+            <div className="push-modal-actions">
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setShowPushModal(false);
+                  setPushMessage("");
+                  setPushTitle("");
+                  setSelectedPushUser(null);
+                }}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="send-btn"
+                onClick={sendPushNotification}
+                disabled={actionLoading}
+              >
+                {actionLoading ? "Sending..." : "Send"}
+              </button>
+
+            </div>
+          </div>
+        </div>
       )}
+
       {actionLoading && <ActionLoader />}
       {/* Toast container */}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />

@@ -53,7 +53,7 @@ const Wrapper = styled.section`
   border: 1px solid #ddd;
   border-radius: 8px;
   outline: none;
-  background: #f9f9f9;
+  background: #fffbf4;
   transition: all 0.3s ease-in-out;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -77,6 +77,7 @@ const Wrapper = styled.section`
     position: relative;
     margin-left: 10px;
     margin-right: 10px;
+    border-radius: 12px;
   }
 
 
@@ -119,8 +120,8 @@ const Wrapper = styled.section`
   }
 
   .add-btn {
-    background-color: #4977f6ff;
-    color: black;
+    background-color: #7f5af0;
+    color: #fff;
     font-weight: bold;
     border: none;
   }
@@ -223,7 +224,7 @@ const Wrapper = styled.section`
   thead {
     position: sticky;
     top: -1px;
-    background: #4977f6ff;
+    background: #7f5af0;
     color: white;
     z-index: 1;
     table-layout: fixed;
@@ -232,27 +233,26 @@ const Wrapper = styled.section`
   table th,
   table td {
     border: 1px solid #ddd;
-    padding: 10px;
+   padding: 10px;
     text-align: center;
   }
 
   table th {
-    background: #4977f6ff);
-    color: black;
+    background: #7f5af0;
+    color: #fff;
   }
 
   table td {
-    background: #fff;
+    background: #fffbf4;
   }
 
-  
   .table-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: white;
+  background-color: #e6e6e6;
   padding: 10px 10px 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  // box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
   .edit-btn {
@@ -348,8 +348,8 @@ const Wrapper = styled.section`
   align-items: center; 
   gap: 6px;
   
-  background-color: #4977f6ff;
-  color: #333;
+  background-color: #7f5af0;
+  color: #fff;
   font-size: 14px;
   font-weight: 500;
   border: 1px solid #ccc;
@@ -360,8 +360,8 @@ const Wrapper = styled.section`
 }
 
 .edit-btn:hover {
-  background-color: #e2e6ea;
-  border-color: #999;
+  // background-color: #e2e6ea;
+  // border-color: #999;
   transform: scale(1.03);
 }
 

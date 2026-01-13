@@ -19,7 +19,6 @@ const Wrapper = styled.section`
     min-width: 150px;
   }
     
-
 .search-container {
   flex-grow: 1;
   width: 100%;
@@ -42,8 +41,6 @@ const Wrapper = styled.section`
     transition: color 0.3s ease-in-out;
   }
 
-
-
 .search-input {
   width: 100%;
   max-width: 450px;
@@ -53,11 +50,10 @@ const Wrapper = styled.section`
   border: 1px solid #ddd;
   border-radius: 8px;
   outline: none;
-  background: #f9f9f9;
+  background: #fffbf4;
   transition: all 0.3s ease-in-out;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
 
   .search-input:focus {
     border-color: #007bff;
@@ -77,6 +73,8 @@ const Wrapper = styled.section`
     position: relative;
     margin-left: 10px;
     margin-right: 10px;
+    border-radius: 12px;
+
   }
 
 
@@ -225,7 +223,7 @@ const Wrapper = styled.section`
   thead {
     position: sticky;
     top: -1px;
-    background: #4977f6ff;
+    background: #7f5af0;
     color: white;
     z-index: 1;
     table-layout: fixed;
@@ -239,22 +237,21 @@ const Wrapper = styled.section`
   }
 
   table th {
-    background: #4977f6ff;
-    color: black;
+    background: #7f5af0;
+    color: #fff;
   }
 
   table td {
-    background: #fff;
+    background: #fffbf4;
   }
 
-  
   .table-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: white;
+  background-color: #e6e6e6;
   padding: 10px 10px 0;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  // box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
   .edit-btn {
@@ -348,8 +345,8 @@ const Wrapper = styled.section`
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: #4977f6ff;
-  color: #333;
+  background-color: #7f5af0;
+  color: #fff;
   font-size: 14px;
   font-weight: 500;
   border: 1px solid #ccc;
@@ -360,8 +357,8 @@ const Wrapper = styled.section`
 }
 
 .edit-btn:hover {
-  background-color: #e2e6ea;
-  border-color: #999;
+  // background-color: #e2e6ea;
+  // border-color: #999;
   transform: scale(1.03);
 }
 
@@ -472,7 +469,7 @@ const Wrapper = styled.section`
 
 .filter-btn {
   padding: 4px 16px;
-  background-color: #4977f6ff;
+  background-color: #7f5af0;
   color: #333;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -491,7 +488,6 @@ const Wrapper = styled.section`
   transform: scale(0.96);
 }
 
-
 .form-group {
   display: flex;
   flex-direction: column;
@@ -506,7 +502,6 @@ const Wrapper = styled.section`
   margin-bottom: 5px;
   color: #333;
 }
-
 
   @keyframes fadeIn {
     from {
@@ -533,6 +528,7 @@ const Wrapper = styled.section`
   color: #555;
   text-align: right;
 }
+
   .status.success {
   color: green;
   font-weight: 600;
